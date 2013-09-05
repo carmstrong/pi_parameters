@@ -31,10 +31,7 @@ class Parameters {
     public function __construct()
     {
         $this->EE =& get_instance();
-    }
-
-    function Parameters()
-    {        
+        
         $get = $this->EE->TMPL->fetch_param('get') ? $this->EE->TMPL->fetch_param('get') : false;
         $this->separator = $this->EE->TMPL->fetch_param('separator') ? $this->EE->TMPL->fetch_param('separator') : '|';
         $flatten_arrays = $this->EE->TMPL->fetch_param('flatten_arrays') == 'yes' ? true : false;
