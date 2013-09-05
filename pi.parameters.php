@@ -52,7 +52,7 @@ class Parameters {
             {
                 foreach($value as $k => $v)
                 {
-                    $cond[$request_method.'_'.$key.'_'.$k] = $this->EE->input->clean_input_data($v);
+                    $cond[$request_method.'_'.$key.'_'.$k] = $this->EE->input->get_post($v, TRUE);
                 }
                 //$cond[$request_method.'_'.$key.'_boolean'] = true;
             }
@@ -61,13 +61,13 @@ class Parameters {
             // actually check against the string. e.g {if post_varname == 'value1|value2|value2'}
             elseif(is_array($value) and !$flatten_arrays)
             {
-                $cond[$request_method.'_'.$key] = $this->EE->input->clean_input_data(implode($this->separator, $value));
+                $cond[$request_method.'_'.$key] = $this->EE->input->get_post(implode($this->separator, $value), TRUE);
                 //$cond[$request_method.'_'.$key.'_boolean'] = $value ? true : false;
             }
             // If it's not an array, just clean the data and set the conditional
             else
             {
-                $cond[$request_method.'_'.$key] = $this->EE->input->clean_input_data($value);
+                $cond[$request_method.'_'.$key] = $this->EE->input->get_post($value, TRUE);
             }
         }
         
