@@ -31,10 +31,11 @@ class Parameters {
     public function __construct()
     {
         $this->EE =& get_instance();
+        
     }
-
-    function Parameters()
-    {        
+    
+    public function pair()
+    {
         $get = $this->EE->TMPL->fetch_param('get') ? $this->EE->TMPL->fetch_param('get') : false;
         $this->separator = $this->EE->TMPL->fetch_param('separator') ? $this->EE->TMPL->fetch_param('separator') : '|';
         $flatten_arrays = $this->EE->TMPL->fetch_param('flatten_arrays') == 'yes' ? true : false;
@@ -52,7 +53,7 @@ class Parameters {
             {
                 foreach($value as $k => $v)
                 {
-                    $cond[$request_method.'_'.$key.'_'.$k] = $this->EE->input->clean_input_data($v);
+                    $cond[$request_method.'_'.$key.'_'.$k] = $this->EE->input->get_post($v, TRUE);
                 }
                 //$cond[$request_method.'_'.$key.'_boolean'] = true;
             }
@@ -61,13 +62,13 @@ class Parameters {
             // actually check against the string. e.g {if post_varname == 'value1|value2|value2'}
             elseif(is_array($value) and !$flatten_arrays)
             {
-                $cond[$request_method.'_'.$key] = $this->EE->input->clean_input_data(implode($this->separator, $value));
+                $cond[$request_method.'_'.$key] = $this->EE->input->get_post(implode($this->separator, $value), TRUE);
                 //$cond[$request_method.'_'.$key.'_boolean'] = $value ? true : false;
             }
             // If it's not an array, just clean the data and set the conditional
             else
             {
-                $cond[$request_method.'_'.$key] = $this->EE->input->clean_input_data($value);
+                $cond[$request_method.'_'.$key] = $this->EE->input->get_post($value, TRUE);
             }
         }
         
@@ -262,10 +263,10 @@ Print a single parameter:
 {exp:parameters:get name="job_id"} or {exp:parameters:post name="job_id"}
 
 Print multiple parameters:
-{exp:parameters}
+{exp:parameters:pair}
     {get_job_id}
     {get_foobar}
-{/exp:parameters}
+{/exp:parameters:pair}
 
 Loop through a parameter that is an array:
 {exp:parameters}
