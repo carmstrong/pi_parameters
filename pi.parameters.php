@@ -16,8 +16,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 $plugin_info = array(
     'pi_name'           => 'Post/Get Parameters',
-    'pi_version'        => '1.4',
-    'pi_author'         => 'Brian Litzinger (updated for EE 2.x by Chris Armstrong)',
+    'pi_version'        => '1.5',
+    'pi_author'         => 'Brian Litzinger, Chris Armstrong, Bransin Anderson',
     'pi_description'    => 'Grab POST and GET parameters.',
     'pi_usage'          => Parameters::usage()
 );
