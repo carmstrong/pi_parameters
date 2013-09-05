@@ -32,6 +32,10 @@ class Parameters {
     {
         $this->EE =& get_instance();
         
+    }
+    
+    public function pair()
+    {
         $get = $this->EE->TMPL->fetch_param('get') ? $this->EE->TMPL->fetch_param('get') : false;
         $this->separator = $this->EE->TMPL->fetch_param('separator') ? $this->EE->TMPL->fetch_param('separator') : '|';
         $flatten_arrays = $this->EE->TMPL->fetch_param('flatten_arrays') == 'yes' ? true : false;
@@ -259,10 +263,10 @@ Print a single parameter:
 {exp:parameters:get name="job_id"} or {exp:parameters:post name="job_id"}
 
 Print multiple parameters:
-{exp:parameters}
+{exp:parameters:pair}
     {get_job_id}
     {get_foobar}
-{/exp:parameters}
+{/exp:parameters:pair}
 
 Loop through a parameter that is an array:
 {exp:parameters}
