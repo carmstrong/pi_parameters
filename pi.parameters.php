@@ -42,6 +42,7 @@ class Parameters {
         
         $tagdata = $this->EE->TMPL->tagdata;
         
+        
         // Prep our conditionals...
         $request_method = strtolower($_SERVER['REQUEST_METHOD']);
 
@@ -176,14 +177,22 @@ class Parameters {
         
         return $this->return_data;
     }
-   
+
+
+
+
+
+
     function get()
     {
         $name = $this->EE->TMPL->fetch_param('name') ? $this->EE->TMPL->fetch_param('name') : false;
+        $default = $this->EE->TMPL->fetch_param('default') ? $this->EE->TMPL->fetch_param('default') : false;
 
         if($name and $this->EE->input->get_post($name, 'GET'))
         {
             $this->return_data = $this->_parse_value($this->EE->input->get_post($name, 'GET'));
+        }elseif($default) {
+            $this->return_data = $default;
         }
 
         return $this->return_data;
@@ -192,10 +201,13 @@ class Parameters {
     function post()
     {        
         $name = $this->EE->TMPL->fetch_param('name') ? $this->EE->TMPL->fetch_param('name') : false;
+        $default = $this->EE->TMPL->fetch_param('default') ? $this->EE->TMPL->fetch_param('default') : false;
 
         if($name and $this->EE->input->get_post($name, 'POST'))
         {
             $this->return_data = $this->_parse_value($this->EE->input->get_post($name, 'POST'));
+        }elseif($default) {
+            $this->return_data = $default;
         }
         
         return $this->return_data;
@@ -204,14 +216,21 @@ class Parameters {
     function request()
     {        
         $name = $this->EE->TMPL->fetch_param('name') ? $this->EE->TMPL->fetch_param('name') : false;
+        $default = $this->EE->TMPL->fetch_param('default') ? $this->EE->TMPL->fetch_param('default') : false;
 
         if($name and $this->EE->input->get_post($name))
         {
             $this->return_data = $this->_parse_value($this->EE->input->get_post($name));
+        }elseif($default) {
+            $this->return_data = $default;
         }
         
         return $this->return_data;
     }
+   
+
+
+
     
     function in_array()
     {
@@ -281,6 +300,15 @@ Parameters
 ------------------
 param = (required) Name of parameter to get if using a single tag.
 separator = (optional, default = |)
+
+param Deafult = (optional) If no GET or POST data for key, use default value.
+
+Set Default
+{exp:parameters:get name="job_id" default="My Job ID" }
+
+
+
+
 
 Variables
 ------------------
