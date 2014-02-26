@@ -177,12 +177,7 @@ class Parameters {
         
         return $this->return_data;
     }
-
-
-
-
-
-
+   
     function get()
     {
         $name = $this->EE->TMPL->fetch_param('name') ? $this->EE->TMPL->fetch_param('name') : false;
@@ -227,10 +222,6 @@ class Parameters {
         
         return $this->return_data;
     }
-   
-
-
-
     
     function in_array()
     {
@@ -305,10 +296,6 @@ param Deafult = (optional) If no GET or POST data for key, use default value.
 
 Set Default
 {exp:parameters:get name="job_id" default="My Job ID" }
-
-
-
-
 
 Variables
 ------------------
