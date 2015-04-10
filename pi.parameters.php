@@ -41,12 +41,9 @@ class Parameters {
         $flatten_arrays = $this->EE->TMPL->fetch_param('flatten_arrays') == 'yes' ? true : false;
         
         $tagdata = $this->EE->TMPL->tagdata;
-        
-        
-        // Prep our conditionals...
-        $request_method = strtolower($_SERVER['REQUEST_METHOD']);
 
-        foreach ($_REQUEST as $key => $value)
+        $prefix = 'get';
+        foreach ($_GET as $key => $value)
         {
             // If it's an array, we can write a conditional such as {if post_varname_keyname}
             // which would be the equivelant of doing if($_POST[varname][keyname])
@@ -54,25 +51,53 @@ class Parameters {
             {
                 foreach($value as $k => $v)
                 {
-                    $cond[$request_method.'_'.$key.'_'.$k] = $this->EE->input->get_post($v, TRUE);
+                    $cond[$prefix.'_'.$key.'_'.$k] = $this->EE->security->xss_clean($v);
                 }
-                //$cond[$request_method.'_'.$key.'_boolean'] = true;
+                //$cond[$prefix.'_'.$key.'_boolean'] = true;
             }
             // If it's an array, and we want to see if it's populated, and not checking for a specific value
             // then we just implode the array into a flat string, and can just do a boolean check, or
             // actually check against the string. e.g {if post_varname == 'value1|value2|value2'}
             elseif(is_array($value) and !$flatten_arrays)
             {
-                $cond[$request_method.'_'.$key] = $this->EE->input->get_post(implode($this->separator, $value), TRUE);
-                //$cond[$request_method.'_'.$key.'_boolean'] = $value ? true : false;
+                $cond[$prefix.'_'.$key] = $this->EE->security->xss_clean(implode($this->separator, $value));
+                //$cond[$prefix.'_'.$key.'_boolean'] = $value ? true : false;
             }
             // If it's not an array, just clean the data and set the conditional
             else
             {
-                $cond[$request_method.'_'.$key] = $this->EE->input->get_post($value, TRUE);
+                $cond[$prefix.'_'.$key] = $this->EE->security->xss_clean($value);
             }
         }
-        
+
+       $prefix = 'post';
+       foreach ($_POST as $key => $value)
+        {
+            // If it's an array, we can write a conditional such as {if post_varname_keyname}
+            // which would be the equivelant of doing if($_POST[varname][keyname])
+            if(is_array($value) and $flatten_arrays)
+            {
+                foreach($value as $k => $v)
+                {
+                    $cond[$prefix.'_'.$key.'_'.$k] = $this->EE->security->xss_clean($v);
+                }
+                //$cond[$prefix.'_'.$key.'_boolean'] = true;
+            }
+            // If it's an array, and we want to see if it's populated, and not checking for a specific value
+            // then we just implode the array into a flat string, and can just do a boolean check, or
+            // actually check against the string. e.g {if post_varname == 'value1|value2|value2'}
+            elseif(is_array($value) and !$flatten_arrays)
+            {
+                $cond[$prefix.'_'.$key] = $this->EE->security->xss_clean(implode($this->separator, $value));
+                //$cond[$prefix.'_'.$key.'_boolean'] = $value ? true : false;
+            }
+            // If it's not an array, just clean the data and set the conditional
+            else
+            {
+                $cond[$prefix.'_'.$key] = $this->EE->security->xss_clean($value);
+            }
+        }
+
         // Would it be possible to modify this core function to support {if in_array:postarray == valuetocheckagainst} ?
         $tagdata = $this->EE->functions->prep_conditionals($tagdata, $cond);
         
